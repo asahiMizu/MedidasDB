@@ -1,7 +1,8 @@
-package medicionesdb;
+package DB_Access;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.List;
 public class DataAccess {
     private Connection  conexion;
 
-    static final int TABLA_PERSONA = 1;
-    static final int TABLA_MEDIDAS = 2;
+    public static final int TABLA_PERSONA = 1;
+    public static final int TABLA_MEDIDAS = 2;
 
     public DataAccess() {
         conexion = ConexionBD.getConexion("jdbc:derby://localhost:1527/MedicionesDataBase", "root", "root");
@@ -31,6 +32,26 @@ public class DataAccess {
         }
         return res;
     }
+
+    public boolean deletePersona(int id) {
+    boolean deleted = false;
+    try (Statement st = conexion.createStatement()) {
+        String sql = "DELETE FROM ROOT.PERSONA WHERE IDPERSONA = " + id;
+        System.out.println(sql);
+        int rowsAffected = st.executeUpdate(sql);
+        if (rowsAffected > 0) {
+            deleted = true;
+            System.out.println("Registro eliminado correctamente.");
+            conexion.commit();
+        } else {
+            System.out.println("No se encontró ningún registro con el ID proporcionado.");
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al eliminar el registro: " + e.getMessage());
+    }
+    return deleted;
+    }
+
     public List <Object[]> conexionConsultaDatos(String sql, int tabla) {
         //regresa los requisitos de las personas en una lista
         List <Object[]> datos = new ArrayList<Object[]>();

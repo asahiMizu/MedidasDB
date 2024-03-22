@@ -1,4 +1,4 @@
-package medicionesdb;
+package DB_Access;
 
 import java.sql.Connection;   
 import java.sql.DriverManager;

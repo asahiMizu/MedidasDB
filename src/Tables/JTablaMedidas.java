@@ -1,4 +1,9 @@
-package medicionesdb;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Tables;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -11,13 +16,26 @@ import javax.swing.table.*;
 
 import java.util.List;
 
-public class TablaMediciones extends JFrame {
+import DB_Access.DataAccess;
 
-    private DataAccess dataAccess = new DataAccess();
+/**
+ *
+ * @author asahi
+ */
+public class JTablaMedidas extends JPanel{
+        private DataAccess dataAccess = new DataAccess();
 
     private Font cellFont = new Font("Century Gothic", Font.PLAIN, 18);
     private Color cellBackground = new Color(239, 253, 255);
     private Color cellForeground = new Color(45, 168, 190 );
+    private int width = 970;
+    private int height = 600;
+    private JTable jt;
+    private List<Object[]> medicionesData;
+    private JScrollPane jsp;
+    private TableModel tm;
+    private boolean deleteMode = false;
+
 
     private String[] encabezados = new String[] {
         "IDMEDIDAS",
@@ -28,14 +46,13 @@ public class TablaMediciones extends JFrame {
         "IDPERSONA"
     };
 
-    public TablaMediciones() {
-        super("Tabla Mediciones");
-        setSize(970, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    public JTablaMedidas() {
+        super();
+        setPreferredSize(new Dimension(width, height));
 
         
         String consulta = "SELECT * FROM ROOT.MEDIDAS";
-        List<Object[]> medicionesData = dataAccess.conexionConsultaDatos(consulta, DataAccess.TABLA_MEDIDAS);
+        medicionesData = dataAccess.conexionConsultaDatos(consulta, DataAccess.TABLA_MEDIDAS);
 
         TableModel tm = new AbstractTableModel() {
             //tabla con varias columnas
@@ -55,21 +72,26 @@ public class TablaMediciones extends JFrame {
                 }
 
         };
-        final JTable jt = new JTable(tm);
-        jt.setFillsViewportHeight(true);
-
+        jt = new JTable(tm);
+        
         jt.setDefaultRenderer(Object.class, new customCell());
         jt.setRowHeight(30);
         jt.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jt.setPreferredSize(new Dimension(width, height));
+        jt.setFillsViewportHeight(true);
+
         jt.doLayout();
+        
 
         jt.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
+                    deleteMode = false;
                     int row    = jt.rowAtPoint(e.getPoint());
                     int column =jt.columnAtPoint(e.getPoint());
                 
+                    if(column != 0)
                         jt.editCellAt(row, column);
                 }
             }
@@ -81,27 +103,71 @@ public class TablaMediciones extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     int row = jt.getSelectedRow();
                     int column = jt.getSelectedColumn();
-                    if(row != -1 && column != -1) {
+                    if(row != -1 && column != -1 && !deleteMode) {
                         TableCellEditor editor = jt.getCellEditor();
                         if(editor != null) {
                             editor.stopCellEditing();
                         }
                         // Actualizar el dato de la celda en el modelo de la tabla y en la base de datos
+                        
                         tm.setValueAt(jt.getValueAt(row, column), row, column);
                     }
                 }
 
             }
         });
+        jt.setLayout(new GridLayout());
 
-        JScrollPane jsp = new JScrollPane(jt);
-        getContentPane().add(jsp, BorderLayout.CENTER);
+        jsp = new JScrollPane(jt);
+        jsp.setPreferredSize(new Dimension(width, height));
+        super.add(jsp);
 
+    }
+
+    public void deleteSelectedRow() {
+        int row = jt.getSelectedRow();
+        if (row >= 0 && row < medicionesData.size()) {
+            String id = (String) jt.getValueAt(row, 0);
+            String deleteQuery = "DELETE FROM ROOT.MEDIDAS WHERE IDPERSONA = " + id;
+            System.out.print(deleteQuery);
+            dataAccess.insertData(deleteQuery); // Asume que esto elimina correctamente el dato de la DB
+    
+            // Ahora, elimina el dato de medicionesData
+            medicionesData.remove(row);
+    
+            // Notifica al modelo de la tabla que los datos han cambiado
+            ((AbstractTableModel) jt.getModel()).fireTableDataChanged();
+        }
+    }
+    public int getSelectedRow(){
+        return jt.getSelectedRow();
+    }
+    public TableColumnModel getColumnModel(){
+        return jt.getColumnModel();
+    }
+    public Object getValueAt(int row, int column){
+        return jt.getValueAt(row, column);
+    }
+
+    public List<Object[]> getPersonasData() {
+        return medicionesData;
+    }
+    public void updateTable() {
+        String consulta = "SELECT * FROM ROOT.MEDIDAS";
+        medicionesData = dataAccess.conexionConsultaDatos(consulta, DataAccess.TABLA_PERSONA);
+
+        jt = new JTable(tm);
+
+        jsp = new JScrollPane(jt);
+        jsp.setPreferredSize(new Dimension(width, height));
+        super.add(jsp);
+        ((AbstractTableModel) jt.getModel()).fireTableDataChanged();
     }
 
     private void updateCellData(int row, int column, Object value) {
         
         String newValue = (String)value;
+        String id  = (String)jt.getValueAt((row ), 0);
         if(column == 2) {
             newValue = "'"+value+"'";
         }
@@ -109,18 +175,13 @@ public class TablaMediciones extends JFrame {
             + encabezados[column] 
             + " = " 
             + newValue 
-            + " WHERE IDPERSONA = " 
-            + (row + 1) ;
+            + " WHERE IDMEDIDAS = " 
+            + id ;
 
         System.out.println(update);
         dataAccess.insertData(update);
     }
 
-    public static void main(String args[]) {
-        TablaMediciones se = new TablaMediciones();
-        se.setVisible(true);
-    }
-    
 
     private class customCell extends JTextField implements TableCellRenderer {
         public customCell() {
@@ -129,6 +190,8 @@ public class TablaMediciones extends JFrame {
             setForeground(cellForeground);
             setBackground(cellBackground);
             setHorizontalAlignment(SwingConstants.CENTER);
+            setPreferredSize(new Dimension(120, 15));
+            setMaximumSize(new Dimension(200, 15));
         }
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
