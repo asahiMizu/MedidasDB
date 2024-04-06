@@ -1,6 +1,7 @@
 package TableModels;
 import DB_Access.*;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -32,6 +33,27 @@ public class medidasModel extends AbstractTableModel{
     }
     public String getColumnName(int c) { return encabezados[c]; }
     public boolean isCellEditable(int r, int c) { return true; }
+
+    public void addRow(Object[] dates) {
+        //Añadir fila a la lista y la base de datos
+        if (dates.length == encabezados.length) {
+            Date   FECHA         = (Date)dates[1];
+            double PESO          = Double.parseDouble((String)dates[2]);
+            int    CINTURA       = Integer.parseInt((String)dates[3]);
+            double GRASACORPORAL = Double.parseDouble((String)dates[4]);
+            int    IDPERSONA     = Integer.parseInt((String)dates[5]);
+
+            int generatedID = dataAccess.addMedida(FECHA, PESO, CINTURA, GRASACORPORAL, IDPERSONA);
+
+            if(generatedID != -1) {
+                dates[0] = generatedID;
+                medicionesData.add(dates);
+                int row = medicionesData.size() - 1;
+                fireTableRowsInserted(row, row);
+            }
+        }
+    }
+
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) { 
             // Actualizar el valor en el modelo de la tabla
             medicionesData.get(rowIndex)[columnIndex] = aValue;
@@ -40,21 +62,26 @@ public class medidasModel extends AbstractTableModel{
     }
 
     private void updateCellData(int row, int column, Object value) {
-        
-        String newValue = (String)value;
-        String id  = (String)getValueAt((row ), 0);
-        if(column == 2) {
-            newValue = "'"+value+"'";
+        if(row >= 0 && row < medicionesData.size()) {
+            String newValue = (String)value;
+            int id = getID(row);
+            dataAccess.updateMedida(encabezados, id, column, newValue);
+            fireTableCellUpdated(row, column);
         }
-        String update = "UPDATE ROOT.MEDIDAS SET " 
-            + encabezados[column] 
-            + " = " 
-            + newValue 
-            + " WHERE IDMEDIDAS = " 
-            + id ;
-
-        System.out.println(update);
-        dataAccess.insertData(update);
+    }
+    public void removeRow(int row) {
+        if(row >= 0 && row < medicionesData.size()) {
+            int id = getID(row);
+            dataAccess.deleteMedida(id);
+            medicionesData.remove(row);
+            fireTableRowsDeleted(row, row);
+        }
+    }
+    public int getID(int row) {
+        if(row >= 0 && row < medicionesData.size()) {
+            return (int)getValueAt(row, 0);
+        } 
+        return 0;
     }
 }
 
