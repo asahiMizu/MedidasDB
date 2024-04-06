@@ -440,7 +440,7 @@ public class AppMedidas extends javax.swing.JFrame {
 
     //Agregar Registro
     private void addPersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPersonaButtonActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_addPersonaButtonActionPerformed
 
     private void addMedidasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedidasButtonActionPerformed
