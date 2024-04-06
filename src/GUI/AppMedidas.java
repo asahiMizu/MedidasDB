@@ -46,10 +46,10 @@ public class AppMedidas extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         label1 = new java.awt.Label();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        deletePersonaButton = new javax.swing.JButton();
+        addPersonaButton = new javax.swing.JButton();
+        addMedidasButton = new javax.swing.JButton();
+        updateTableButton = new javax.swing.JButton();
         jTablaPersona2 = new tablascomponente.JTablaPersona();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -63,9 +63,9 @@ public class AppMedidas extends javax.swing.JFrame {
         jSpinner2 = new javax.swing.JSpinner();
         jSpinner3 = new javax.swing.JSpinner();
         jSpinner4 = new javax.swing.JSpinner();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        updateTableButton2 = new javax.swing.JButton();
+        addMedidaButton2 = new javax.swing.JButton();
+        deleteMedidaButton = new javax.swing.JButton();
         label2 = new java.awt.Label();
         jTablaMedidas1 = new tablascomponente.JTablaMedidas();
 
@@ -83,11 +83,6 @@ public class AppMedidas extends javax.swing.JFrame {
 
         nombrefield.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         nombrefield.setText("Inserta tu nombre");
-        nombrefield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nombrefieldActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jLabel2.setText("Sexo: ");
@@ -161,43 +156,43 @@ public class AppMedidas extends javax.swing.JFrame {
         label1.setFont(new java.awt.Font("Palatino Linotype", 1, 36)); // NOI18N
         label1.setText("Manipulación de datos de personas");
 
-        jButton2.setBackground(new java.awt.Color(204, 255, 255));
-        jButton2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(0, 51, 204));
-        jButton2.setText("Eliminar reg. seleccionado");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        deletePersonaButton.setBackground(new java.awt.Color(204, 255, 255));
+        deletePersonaButton.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        deletePersonaButton.setForeground(new java.awt.Color(0, 51, 204));
+        deletePersonaButton.setText("Eliminar reg. seleccionado");
+        deletePersonaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                deletePersonaButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(204, 255, 255));
-        jButton3.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 51, 204));
-        jButton3.setText("Agregar Registro");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        addPersonaButton.setBackground(new java.awt.Color(204, 255, 255));
+        addPersonaButton.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        addPersonaButton.setForeground(new java.awt.Color(0, 51, 204));
+        addPersonaButton.setText("Agregar Registro");
+        addPersonaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                addPersonaButtonActionPerformed(evt);
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(204, 255, 255));
-        jButton4.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 51, 204));
-        jButton4.setText("Agregar medidas");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        addMedidasButton.setBackground(new java.awt.Color(204, 255, 255));
+        addMedidasButton.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        addMedidasButton.setForeground(new java.awt.Color(0, 51, 204));
+        addMedidasButton.setText("Agregar medidas");
+        addMedidasButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                addMedidasButtonActionPerformed(evt);
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(204, 255, 255));
-        jButton5.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(0, 51, 204));
-        jButton5.setText("Actualizar");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        updateTableButton.setBackground(new java.awt.Color(204, 255, 255));
+        updateTableButton.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        updateTableButton.setForeground(new java.awt.Color(0, 51, 204));
+        updateTableButton.setText("Actualizar");
+        updateTableButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                updateTableButtonActionPerformed(evt);
             }
         });
 
@@ -218,13 +213,13 @@ public class AppMedidas extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTablaPersona2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(addPersonaButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(deletePersonaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4)
+                                .addComponent(addMedidasButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton5)))))
+                                .addComponent(updateTableButton)))))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -236,10 +231,10 @@ public class AppMedidas extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
+                    .addComponent(addPersonaButton)
+                    .addComponent(deletePersonaButton)
+                    .addComponent(addMedidasButton)
+                    .addComponent(updateTableButton))
                 .addGap(28, 28, 28)
                 .addComponent(jTablaPersona2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1549, 1549, 1549))
@@ -278,33 +273,33 @@ public class AppMedidas extends javax.swing.JFrame {
 
         jSpinner4.setModel(new javax.swing.SpinnerNumberModel(140, 140, 210, 1));
 
-        jButton6.setBackground(new java.awt.Color(204, 255, 255));
-        jButton6.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(0, 51, 204));
-        jButton6.setText("Actualizar tabla");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        updateTableButton2.setBackground(new java.awt.Color(204, 255, 255));
+        updateTableButton2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        updateTableButton2.setForeground(new java.awt.Color(0, 51, 204));
+        updateTableButton2.setText("Actualizar tabla");
+        updateTableButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                updateTableButton2ActionPerformed(evt);
             }
         });
 
-        jButton7.setBackground(new java.awt.Color(204, 255, 255));
-        jButton7.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(0, 51, 204));
-        jButton7.setText("Agregar Medida");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        addMedidaButton2.setBackground(new java.awt.Color(204, 255, 255));
+        addMedidaButton2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        addMedidaButton2.setForeground(new java.awt.Color(0, 51, 204));
+        addMedidaButton2.setText("Agregar Medida");
+        addMedidaButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                addMedidaButton2ActionPerformed(evt);
             }
         });
 
-        jButton8.setBackground(new java.awt.Color(204, 255, 255));
-        jButton8.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        jButton8.setForeground(new java.awt.Color(0, 51, 204));
-        jButton8.setText("Eliminar medida");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        deleteMedidaButton.setBackground(new java.awt.Color(204, 255, 255));
+        deleteMedidaButton.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        deleteMedidaButton.setForeground(new java.awt.Color(0, 51, 204));
+        deleteMedidaButton.setText("Eliminar medida");
+        deleteMedidaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                deleteMedidaButtonActionPerformed(evt);
             }
         });
 
@@ -337,13 +332,13 @@ public class AppMedidas extends javax.swing.JFrame {
                         .addComponent(jSpinner2)))
                 .addGap(64, 64, 64)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton6)
-                    .addComponent(jButton8))
+                    .addComponent(updateTableButton2)
+                    .addComponent(deleteMedidaButton))
                 .addContainerGap(166, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                     .addContainerGap(518, Short.MAX_VALUE)
-                    .addComponent(jButton7)
+                    .addComponent(addMedidaButton2)
                     .addGap(168, 168, 168)))
         );
         jPanel2Layout.setVerticalGroup(
@@ -372,14 +367,14 @@ public class AppMedidas extends javax.swing.JFrame {
                 .addContainerGap(83, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton8)
+                .addComponent(deleteMedidaButton)
                 .addGap(27, 27, 27)
-                .addComponent(jButton6)
+                .addComponent(updateTableButton2)
                 .addGap(86, 86, 86))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(26, 26, 26)
-                    .addComponent(jButton7)
+                    .addComponent(addMedidaButton2)
                     .addContainerGap(219, Short.MAX_VALUE)))
         );
 
@@ -439,19 +434,32 @@ public class AppMedidas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void deletePersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletePersonaButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_deletePersonaButtonActionPerformed
 
     //Agregar Registro
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void addPersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPersonaButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_addPersonaButtonActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void addMedidasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedidasButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
+    }//GEN-LAST:event_addMedidasButtonActionPerformed
+    private void updateTableButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+    private void updateTableButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+    private void addMedidaButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+    private void deleteMedidaButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -495,15 +503,13 @@ public class AppMedidas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addMedidaButton2;
+    private javax.swing.JButton addMedidasButton;
+    private javax.swing.JButton addPersonaButton;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
+    private javax.swing.JButton deleteMedidaButton;
+    private javax.swing.JButton deletePersonaButton;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -532,5 +538,7 @@ public class AppMedidas extends javax.swing.JFrame {
     private java.awt.Label label1;
     private java.awt.Label label2;
     private java.awt.TextField nombrefield;
+    private javax.swing.JButton updateTableButton;
+    private javax.swing.JButton updateTableButton2;
     // End of variables declaration//GEN-END:variables
 }
