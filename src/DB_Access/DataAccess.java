@@ -1,11 +1,14 @@
 package DB_Access;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 
 public class DataAccess {
@@ -19,7 +22,7 @@ public class DataAccess {
         System.out.println("Intento de conexion a la BD");
     }
 
-    public boolean insertData(String sql) { //actualiza datos
+    public boolean updateData(String sql) { //actualiza datos
         boolean res = false;
         try {
             java.sql.Statement st = conexion.createStatement();
@@ -32,24 +35,122 @@ public class DataAccess {
         }
         return res;
     }
-
-    public boolean deletePersona(int id) {
-    boolean deleted = false;
-    try (Statement st = conexion.createStatement()) {
-        String sql = "DELETE FROM ROOT.PERSONA WHERE IDPERSONA = " + id;
-        System.out.println(sql);
-        int rowsAffected = st.executeUpdate(sql);
-        if (rowsAffected > 0) {
-            deleted = true;
-            System.out.println("Registro eliminado correctamente.");
+    public int insertData(String sql) {
+        int generatedKey = -1;
+        try {
+            PreparedStatement st = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.executeUpdate();
+            ResultSet rs = st.getGeneratedKeys();
+            if (rs.next()) {
+                generatedKey = rs.getInt(1);
+            }
             conexion.commit();
-        } else {
-            System.out.println("No se encontró ningún registro con el ID proporcionado.");
+            System.out.println("Se insertó con el ID: " + generatedKey);
+        } catch (Exception e) {
+            System.err.println("Error al insertar/Actualizar" + e.getMessage());
+            return -1; 
         }
-    } catch (SQLException e) {
-        System.err.println("Error al eliminar el registro: " + e.getMessage());
+        return generatedKey;
     }
-    return deleted;
+
+
+    public int addPersona(String NOMBRE, Date FECHANAC, String SEXO, int ESTATURA) {
+        String insertData = "INSERT INTO ROOT.PERSONA (NOMBRE, FECHANAC, SEXO, ESTATURA) VALUES";
+        SimpleDateFormat ff = new SimpleDateFormat("YYYY-MM-dd");
+        String fechaString = ff.format(FECHANAC);
+
+        insertData += "('" 
+            + NOMBRE + "', '" 
+            + fechaString + "', '"
+            + SEXO.charAt(0)
+            + ESTATURA
+            + ")";
+        System.out.println(insertData);
+        return insertData(insertData);
+    }
+
+    public void updatePersona(String[] encabezados, int id, int column, Object value) {
+        String newValue = (String)value;
+        if(column == 1 || column == 2 || column == 3) {
+            newValue = "'"+value+"'";
+        }
+        String update = "UPDATE ROOT.PERSONA SET " 
+            + encabezados[column] 
+            + " = " 
+            + newValue 
+            + " WHERE IDPERSONA = " 
+            + id ;
+
+        System.out.println(update);
+        updateData(update);
+    }
+    public boolean deletePersona(int id) {
+        boolean deleted = false;
+        try (Statement st = conexion.createStatement()) {
+            String sql = "DELETE FROM ROOT.PERSONA WHERE IDPERSONA = " + id;
+            System.out.println(sql);
+            int rowsAffected = st.executeUpdate(sql);
+            if (rowsAffected > 0) {
+                deleted = true;
+                System.out.println("Registro eliminado correctamente.");
+                conexion.commit();
+            } else {
+                System.out.println("No se encontró ningún registro con el ID proporcionado.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar el registro: " + e.getMessage());
+        }
+        return deleted;
+    }
+
+    public int addMedida(Date FECHA, double PESO, int CINTURA, double GRASACORPORAL, int IDPERSONA) {
+        String insertData = "INSERT INTO ROOT.MEDIDAS (FECHA, PESO, CINTURA, GRASACORPORAL, IDPERSONA) VALUES";
+        SimpleDateFormat ff = new SimpleDateFormat("YYYY-MM-dd");
+        String fechaString = ff.format(FECHA);
+
+        insertData += "('" 
+            + fechaString + "', " 
+            + PESO + ", "
+            + CINTURA + ", "
+            + GRASACORPORAL +", "
+            + IDPERSONA
+            + ")";
+        System.out.println(insertData);
+        return insertData(insertData);
+    }
+    public void updateMedida(String[] encabezados, int id, int column, Object value) {
+        String newValue = (String)value;
+        if(column == 2) {
+            newValue = "'"+value+"'";
+        }
+        String update = "UPDATE ROOT.MEDIDAS SET " 
+            + encabezados[column] 
+            + " = " 
+            + newValue 
+            + " WHERE IDMEDIDAS = " 
+            + id ;
+
+        System.out.println(update);
+        updateData(update);
+    }
+
+    public boolean deleteMedida(int id) {
+        boolean deleted = false;
+        try (Statement st = conexion.createStatement()) {
+            String sql = "DELETE FROM ROOT.MEDIDAS WHERE IDMEDIDAS = " + id;
+            System.out.println(sql);
+            int rowsAffected = st.executeUpdate(sql);
+            if (rowsAffected > 0) {
+                deleted = true;
+                System.out.println("Registro eliminado correctamente.");
+                conexion.commit();
+            } else {
+                System.out.println("No se encontró ningún registro con el ID proporcionado.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar el registro: " + e.getMessage());
+        }
+        return deleted;
     }
 
     public List <Object[]> conexionConsultaDatos(String sql, int tabla) {
