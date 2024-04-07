@@ -79,9 +79,28 @@ public class medidasModel extends AbstractTableModel{
     }
     public int getID(int row) {
         if(row >= 0 && row < medicionesData.size()) {
-            return (int)getValueAt(row, 0);
+            getValueAt(row, 0);
+            Object id = getValueAt(row, 0);
+            if(id instanceof Integer) {
+                return (int)id;
+            } else if(id instanceof String) {
+                try {
+                    return Integer.parseInt((String) id);
+                } catch (NumberFormatException e) {
+                    System.err.println(id + " no es un entero : " + e.getMessage());
+                }
+            } else if (id == null) {
+                System.err.println("id es un valor nulo");
+            } else {
+                System.err.println("id es un valor valido");
+            }
+
         } 
-        return 0;
+        return -1;
+    }
+    
+    public List<Object[]> getMedicionesData() {
+        return medicionesData;
     }
 }
 
