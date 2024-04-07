@@ -38,10 +38,10 @@ public class medidasModel extends AbstractTableModel{
         //Añadir fila a la lista y la base de datos
         if (dates.length == encabezados.length) {
             Date   FECHA         = (Date)dates[1];
-            double PESO          = Double.parseDouble((String)dates[2]);
-            int    CINTURA       = Integer.parseInt((String)dates[3]);
-            double GRASACORPORAL = Double.parseDouble((String)dates[4]);
-            int    IDPERSONA     = Integer.parseInt((String)dates[5]);
+            double PESO          = (double)dates[2];
+            int    CINTURA       = (int)dates[3];
+            double GRASACORPORAL = (double)dates[4];
+            int    IDPERSONA     = (int)dates[5];
 
             int generatedID = dataAccess.addMedida(FECHA, PESO, CINTURA, GRASACORPORAL, IDPERSONA);
 
