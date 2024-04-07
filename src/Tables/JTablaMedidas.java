@@ -12,11 +12,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.*;
 
 import java.util.List;
 
 import DB_Access.DataAccess;
+import TableModels.medidasModel;
 
 /**
  *
@@ -33,6 +35,7 @@ public class JTablaMedidas extends JPanel{
     private JTable jt;
     private List<Object[]> medicionesData;
     private JScrollPane jsp;
+    private medidasModel mm;
     private TableModel tm;
     private boolean deleteMode = false;
 
@@ -51,27 +54,9 @@ public class JTablaMedidas extends JPanel{
         setPreferredSize(new Dimension(width, height));
 
         
-        String consulta = "SELECT * FROM ROOT.MEDIDAS";
-        medicionesData = dataAccess.conexionConsultaDatos(consulta, DataAccess.TABLA_MEDIDAS);
-
-        TableModel tm = new AbstractTableModel() {
-            //tabla con varias columnas
-
-            public int getRowCount()    { return medicionesData.size(); }
-            public int getColumnCount() { return 6; }
-            public Object getValueAt(int r, int c) { 
-                return medicionesData.get(r)[c];
-            }
-            public String getColumnName(int c) { return encabezados[c]; }
-            public boolean isCellEditable(int r, int c) { return true; }
-            public void setValueAt(Object aValue, int rowIndex, int columnIndex) { 
-                    // Actualizar el valor en el modelo de la tabla
-                    medicionesData.get(rowIndex)[columnIndex] = aValue;
-                    fireTableCellUpdated(rowIndex, columnIndex); 
-                    updateCellData(rowIndex, columnIndex, aValue);
-                }
-
-        };
+        mm = new medidasModel();
+        medicionesData = mm.getMedicionesData();
+        tm = mm;
         jt = new JTable(tm);
         
         jt.setDefaultRenderer(Object.class, new customCell());
@@ -91,7 +76,7 @@ public class JTablaMedidas extends JPanel{
                     int row    = jt.rowAtPoint(e.getPoint());
                     int column =jt.columnAtPoint(e.getPoint());
                 
-                    if(column != 0)
+                    if(row > 0 && row < medicionesData.size())
                         jt.editCellAt(row, column);
                 }
             }
@@ -124,64 +109,26 @@ public class JTablaMedidas extends JPanel{
 
     }
 
+    public void addMedicion(Object[] dates) {
+        mm.addRow(dates);
+    }
+    public void updateTable(TableModelEvent e) {
+        TableModel model = jt.getModel();
+
+        if (model instanceof DefaultTableModel) {
+            DefaultTableModel tableModel = (DefaultTableModel) model;
+            tableModel.fireTableChanged(e);
+        }
+    
+        // Notificar a la tabla que los datos han cambiado
+        ((AbstractTableModel) model).fireTableDataChanged();
+    }
+
     public void deleteSelectedRow() {
+        deleteMode = true;
         int row = jt.getSelectedRow();
-        if (row >= 0 && row < medicionesData.size()) {
-            String id = (String) jt.getValueAt(row, 0);
-            String deleteQuery = "DELETE FROM ROOT.MEDIDAS WHERE IDPERSONA = " + id;
-            System.out.print(deleteQuery);
-            dataAccess.insertData(deleteQuery); // Asume que esto elimina correctamente el dato de la DB
-    
-            // Ahora, elimina el dato de medicionesData
-            medicionesData.remove(row);
-    
-            // Notifica al modelo de la tabla que los datos han cambiado
-            ((AbstractTableModel) jt.getModel()).fireTableDataChanged();
-        }
+        mm.removeRow(row);
     }
-    public int getSelectedRow(){
-        return jt.getSelectedRow();
-    }
-    public TableColumnModel getColumnModel(){
-        return jt.getColumnModel();
-    }
-    public Object getValueAt(int row, int column){
-        return jt.getValueAt(row, column);
-    }
-
-    public List<Object[]> getPersonasData() {
-        return medicionesData;
-    }
-    public void updateTable() {
-        String consulta = "SELECT * FROM ROOT.MEDIDAS";
-        medicionesData = dataAccess.conexionConsultaDatos(consulta, DataAccess.TABLA_PERSONA);
-
-        jt = new JTable(tm);
-
-        jsp = new JScrollPane(jt);
-        jsp.setPreferredSize(new Dimension(width, height));
-        super.add(jsp);
-        ((AbstractTableModel) jt.getModel()).fireTableDataChanged();
-    }
-
-    private void updateCellData(int row, int column, Object value) {
-        
-        String newValue = (String)value;
-        String id  = (String)jt.getValueAt((row ), 0);
-        if(column == 2) {
-            newValue = "'"+value+"'";
-        }
-        String update = "UPDATE ROOT.MEDIDAS SET " 
-            + encabezados[column] 
-            + " = " 
-            + newValue 
-            + " WHERE IDMEDIDAS = " 
-            + id ;
-
-        System.out.println(update);
-        dataAccess.insertData(update);
-    }
-
 
     private class customCell extends JTextField implements TableCellRenderer {
         public customCell() {
