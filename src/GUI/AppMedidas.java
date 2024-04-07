@@ -6,6 +6,10 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
+import java.util.Date;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 import Tables.*;
 
@@ -31,7 +35,7 @@ public class AppMedidas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTablaPersona1 = new tablascomponente.JTablaPersona();
+        jTablaPersona1 = new Tables.JTablaPersona();
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jTabbedPane2 = new javax.swing.JTabbedPane();
@@ -50,11 +54,11 @@ public class AppMedidas extends javax.swing.JFrame {
         addPersonaButton = new javax.swing.JButton();
         addMedidasButton = new javax.swing.JButton();
         updateTableButton = new javax.swing.JButton();
-        jTablaPersona2 = new tablascomponente.JTablaPersona();
+        jTablaPersona2 = new Tables.JTablaPersona();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        IDComboBox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -67,7 +71,7 @@ public class AppMedidas extends javax.swing.JFrame {
         addMedidaButton2 = new javax.swing.JButton();
         deleteMedidaButton = new javax.swing.JButton();
         label2 = new java.awt.Label();
-        jTablaMedidas1 = new tablascomponente.JTablaMedidas();
+        jTablaMedidas1 = new Tables.JTablaMedidas();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(231, 223, 252));
@@ -247,8 +251,13 @@ public class AppMedidas extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jLabel3.setText("ID Persona");
 
-        jComboBox2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Femenino", "Masculino", "Otro" }));
+        IDComboBox.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
+        IDComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IDComboBoxActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jLabel5.setText("Fecha");
@@ -269,9 +278,9 @@ public class AppMedidas extends javax.swing.JFrame {
 
         jSpinner2.setModel(new javax.swing.SpinnerNumberModel(140, 140, 210, 1));
 
-        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(140, 140, 210, 1));
+        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(140.0d, 140.0d, 210.0d, 1.0d));
 
-        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(140, 140, 210, 1));
+        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(140.0d, 140.0d, 210.0d, 1.0d));
 
         updateTableButton2.setBackground(new java.awt.Color(204, 255, 255));
         updateTableButton2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
@@ -317,7 +326,7 @@ public class AppMedidas extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(IDComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -347,7 +356,7 @@ public class AppMedidas extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(IDComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -435,28 +444,124 @@ public class AppMedidas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void deletePersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletePersonaButtonActionPerformed
-        // TODO add your handling code here:
+        jTablaPersona2.deleteSelectedRow();
     }//GEN-LAST:event_deletePersonaButtonActionPerformed
 
     //Agregar Registro
     private void addPersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPersonaButtonActionPerformed
+        // Obtener los valores ingresados por el usuario
+        String nombre = nombrefield.getText();
+        Date fechaNacimiento = jDateChooser1.getDate();
+        Character sexo = ((String) jComboBox1.getSelectedItem()).charAt(0);
+        int estatura = (Integer) jSpinner1.getValue();
+
+        // Validacion de datos
+        if (!nombre.matches("[a-zA-Z\\s]+")) { // Verificar si el nombre contiene solo letras y espacios
+            JOptionPane.showMessageDialog(this, "El nombre solo puede contener letras y espacios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Intentar convertir la estatura a entero
+        try {
+            Integer.parseInt(jSpinner1.getValue().toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La estatura debe ser un número entero.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Si todos los datos son válidos, crear el objeto dates y agregar la persona
+        Object[] dates = new Object[]{
+            -1, // ID aún no generado
+            nombre, // Nombre del campo
+            fechaNacimiento, // Fecha de nacimiento seleccionada
+            sexo, // Sexo seleccionado
+            estatura // Estatura seleccionada
+        };
         
+        for(int i = 0; i < dates.length; i++) System.out.println("[" + i + "] "+ dates[i] + " " + dates[i].getClass().getName());
+        jTablaPersona2.addPersona(dates);
+
     }//GEN-LAST:event_addPersonaButtonActionPerformed
 
     private void addMedidasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedidasButtonActionPerformed
-        // TODO add your handling code here:
+        //
+
     }//GEN-LAST:event_addMedidasButtonActionPerformed
+
+    private void IDComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDComboBoxActionPerformed
+        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
+    }//GEN-LAST:event_IDComboBoxActionPerformed
     private void updateTableButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        jTablaPersona2.updateTable(null);
     }
     private void updateTableButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        jTablaMedidas1.updateTable(null);
     }
     private void addMedidaButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        Date fecha   = jDateChooser2.getDate();
+        double peso  = (double)jSpinner3.getValue();
+        int cintura  = (int)jSpinner2.getValue();
+        double grasa = (double)jSpinner4.getValue();
+        int idPersona = -1;
+
+        //Validacion
+        try {
+            Double.parseDouble(jSpinner3.getValue().toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El peso debe ser un valor numerico decimal.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            Integer.parseInt(jSpinner2.getValue().toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La medida de la cintura debe ser un numero entero.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            Double.parseDouble(jSpinner4.getValue().toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La medida de la grasa debe ser un valor numerico decimal.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            String[] idNombre = IDComboBox.getSelectedItem().toString().split(",");
+            idPersona = Integer.parseInt(idNombre[0]);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID de persona incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Object[] dates = new Object[]{
+            -1, // ID aún no generado
+            fecha,
+            peso,
+            cintura,
+            grasa,
+            idPersona
+        };
+        for(int i = 0; i < dates.length; i++) System.out.println("[" + i + "] "+ dates[i] + " " + dates[i].getClass().getName());
+        jTablaMedidas1.addMedicion(dates);
     }
     private void deleteMedidaButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        jTablaMedidas1.deleteSelectedRow();
+    }
+
+    private String[] getIDsModel() {
+        DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) IDComboBox.getModel();
+
+        int rowCount = jTablaPersona2.getRowCount();
+        String[] values = new String[rowCount];
+        for (int i = 0 ; i < rowCount; i ++) {
+            Object id     = jTablaPersona2.getValueAt(i, 0);
+            Object nombre = jTablaPersona2.getValueAt(i, 1);
+            if (id != null && nombre != null) {
+                String item = (id.toString()) + ", " + (nombre.toString());
+                if(model.getIndexOf(item) == -1) {
+                    model.addElement(item);
+                    values[i] = item;
+                }
+            }
+        }
+        return values;
     }
     
     
@@ -503,6 +608,7 @@ public class AppMedidas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> IDComboBox;
     private javax.swing.JButton addMedidaButton2;
     private javax.swing.JButton addMedidasButton;
     private javax.swing.JButton addPersonaButton;
@@ -511,7 +617,6 @@ public class AppMedidas extends javax.swing.JFrame {
     private javax.swing.JButton deleteMedidaButton;
     private javax.swing.JButton deletePersonaButton;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
@@ -532,9 +637,9 @@ public class AppMedidas extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinner3;
     private javax.swing.JSpinner jSpinner4;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private tablascomponente.JTablaMedidas jTablaMedidas1;
-    private tablascomponente.JTablaPersona jTablaPersona1;
-    private tablascomponente.JTablaPersona jTablaPersona2;
+    private Tables.JTablaMedidas jTablaMedidas1;
+    private Tables.JTablaPersona jTablaPersona1;
+    private Tables.JTablaPersona jTablaPersona2;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private java.awt.TextField nombrefield;
