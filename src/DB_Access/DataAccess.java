@@ -47,7 +47,7 @@ public class DataAccess {
             conexion.commit();
             System.out.println("Se insertó con el ID: " + generatedKey + " [Class: "+getClass().getName()+"]");
         } catch (Exception e) {
-            System.err.println("Error al insertar/Actualizar" + e.getMessage());
+            System.err.println("Error al insertar/Actualizar " + e.getMessage());
             return -1; 
         }
         return generatedKey;
@@ -120,7 +120,7 @@ public class DataAccess {
     }
     public void updateMedida(String[] encabezados, int id, int column, Object value) {
         String newValue = (String)value;
-        if(column == 2) {
+        if(column == 1) {
             newValue = "'"+value+"'";
         }
         String update = "UPDATE ROOT.MEDIDAS SET " 
