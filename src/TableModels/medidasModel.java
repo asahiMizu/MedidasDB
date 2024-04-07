@@ -56,9 +56,11 @@ public class medidasModel extends AbstractTableModel{
 
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) { 
             // Actualizar el valor en el modelo de la tabla
+        if(rowIndex > 0 && rowIndex < medicionesData.size()) {
             medicionesData.get(rowIndex)[columnIndex] = aValue;
-            fireTableCellUpdated(rowIndex, columnIndex); 
             updateCellData(rowIndex, columnIndex, aValue);
+            fireTableCellUpdated(rowIndex, columnIndex); 
+        }
     }
 
     private void updateCellData(int row, int column, Object value) {
