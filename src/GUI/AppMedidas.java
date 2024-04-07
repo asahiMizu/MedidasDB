@@ -445,6 +445,7 @@ public class AppMedidas extends javax.swing.JFrame {
 
     private void deletePersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletePersonaButtonActionPerformed
         jTablaPersona2.deleteSelectedRow();
+        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
     }//GEN-LAST:event_deletePersonaButtonActionPerformed
 
     //Agregar Registro
@@ -480,6 +481,7 @@ public class AppMedidas extends javax.swing.JFrame {
         
         for(int i = 0; i < dates.length; i++) System.out.println("[" + i + "] "+ dates[i] + " " + dates[i].getClass().getName());
         jTablaPersona2.addPersona(dates);
+        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
 
     }//GEN-LAST:event_addPersonaButtonActionPerformed
 
@@ -489,10 +491,11 @@ public class AppMedidas extends javax.swing.JFrame {
     }//GEN-LAST:event_addMedidasButtonActionPerformed
 
     private void IDComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDComboBoxActionPerformed
-        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
+        //IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
     }//GEN-LAST:event_IDComboBoxActionPerformed
     private void updateTableButtonActionPerformed(java.awt.event.ActionEvent evt) {
         jTablaPersona2.updateTable(null);
+        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
     }
     private void updateTableButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         jTablaMedidas1.updateTable(null);
@@ -546,7 +549,7 @@ public class AppMedidas extends javax.swing.JFrame {
     }
 
     private String[] getIDsModel() {
-        DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) IDComboBox.getModel();
+        //DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) IDComboBox.getModel();
 
         int rowCount = jTablaPersona2.getRowCount();
         String[] values = new String[rowCount];
@@ -555,10 +558,7 @@ public class AppMedidas extends javax.swing.JFrame {
             Object nombre = jTablaPersona2.getValueAt(i, 1);
             if (id != null && nombre != null) {
                 String item = (id.toString()) + ", " + (nombre.toString());
-                if(model.getIndexOf(item) == -1) {
-                    model.addElement(item);
-                    values[i] = item;
-                }
+                values[i] = item;
             }
         }
         return values;
