@@ -36,7 +36,7 @@ public class personaModel extends AbstractTableModel{
     public void addRow(Object[] dates) {
         //Añadir fila a la lista y la base de datos
         if (dates.length == encabezados.length) {
-            String NOMBRE   = (String)dates[1];
+            String NOMBRE   = dates[1].toString();
             Date   FECHANAC = (Date)dates[2];
             char   SEXO     = (Character)dates[3];
             int    ESTATURA = (int)dates[4];
