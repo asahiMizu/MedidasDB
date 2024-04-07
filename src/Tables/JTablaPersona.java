@@ -126,6 +126,7 @@ public class JTablaPersona extends JPanel{
         int row = jt.getSelectedRow();
         pm.removeRow(row);
     }
+    
 
     /* 
     public int getSelectedRow(){
@@ -133,10 +134,13 @@ public class JTablaPersona extends JPanel{
     }
     public TableColumnModel getColumnModel(){
         return jt.getColumnModel();
+    }*/
+    public int getRowCount() {
+        return pm.getRowCount();
     }
     public Object getValueAt(int row, int column){
         return jt.getValueAt(row, column);
-    }*/
+    }
 
 
 
