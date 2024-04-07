@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class JTablaPersona extends JPanel{
     private JTable jt;
     private List<Object[]> personasData;
     private JScrollPane jsp;
+    private personaModel pm;
     private TableModel tm;
     private boolean deleteMode = false;
 
@@ -39,13 +41,10 @@ public class JTablaPersona extends JPanel{
         super();
         setPreferredSize(new Dimension(width, height));
 
-        
-        String consulta = "SELECT * FROM ROOT.PERSONA";
-        personasData = dataAccess.conexionConsultaDatos(consulta, DataAccess.TABLA_PERSONA);
-
-        tm = new personaModel();
+        pm = new personaModel();
+        personasData = pm.getPersonasData();
+        tm = pm;
         jt = new JTable(tm);
-        
 
         jt.setDefaultRenderer(Object.class, new customCell());
         jt.setRowHeight(30);
@@ -100,12 +99,14 @@ public class JTablaPersona extends JPanel{
 
     }
 
-    public List<Object[]> getPersonasData() {
+    /*public List<Object[]> getPersonasData() {
         return personasData;
+    }*/
+
+    public void addPersona(Object[] dates) {
+        pm.addRow(dates);
     }
-    public void updateTable() {
-        String consulta = "SELECT * FROM ROOT.PERSONA";
-        personasData = dataAccess.conexionConsultaDatos(consulta, DataAccess.TABLA_PERSONA);
+    public void updateTable(TableModelEvent e) {
     
         // Obtener el modelo de tabla existente
         TableModel model = jt.getModel();
@@ -113,19 +114,20 @@ public class JTablaPersona extends JPanel{
         // Actualizar los datos en el modelo de tabla
         if (model instanceof DefaultTableModel) {
             DefaultTableModel tableModel = (DefaultTableModel) model;
-            // Limpiar las filas existentes
-            tableModel.setRowCount(0);
-            // Llenar la tabla con los nuevos datos de la base de datos
-            for (Object[] rowData : personasData) {
-                tableModel.addRow(rowData);
-            }
+            tableModel.fireTableChanged(e);
         }
     
         // Notificar a la tabla que los datos han cambiado
         ((AbstractTableModel) model).fireTableDataChanged();
     }
-    
 
+    public void deleteSelectedRow() {
+        deleteMode = true;
+        int row = jt.getSelectedRow();
+        pm.removeRow(row);
+    }
+
+    /* 
     public int getSelectedRow(){
         return jt.getSelectedRow();
     }
@@ -134,27 +136,9 @@ public class JTablaPersona extends JPanel{
     }
     public Object getValueAt(int row, int column){
         return jt.getValueAt(row, column);
-    }
+    }*/
 
 
-    public void deleteSelectedRow() {
-        deleteMode = true;
-        int row = jt.getSelectedRow();
-        if (row >= 0 && row < personasData.size()) {
-            jt.clearSelection();
-            jt.getCellEditor().stopCellEditing();
-            String id = (String) jt.getValueAt(row, 0);
-            String deleteQuery = "DELETE FROM ROOT.PERSONA WHERE IDPERSONA = " + id;
-            System.out.print(deleteQuery);
-            dataAccess.insertData(deleteQuery); // Asume que esto elimina correctamente el dato de la DB
-    
-            // Ahora, elimina el dato de personasData
-            personasData.remove(row);
-    
-            // Notifica al modelo de la tabla que los datos han cambiado
-            ((AbstractTableModel) jt.getModel()).fireTableDataChanged();
-        }
-    }
 
     private class customCell extends JTextField implements TableCellRenderer {
         public customCell() {
