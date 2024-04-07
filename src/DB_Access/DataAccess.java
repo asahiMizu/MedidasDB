@@ -19,7 +19,7 @@ public class DataAccess {
 
     public DataAccess() {
         conexion = ConexionBD.getConexion("jdbc:derby://localhost:1527/MedicionesDataBase", "root", "root");
-        System.out.println("Intento de conexion a la BD");
+        System.out.println("Intento de conexion a la BD [Class: "+getClass().getName()+"]");
     }
 
     public boolean updateData(String sql) { //actualiza datos
@@ -28,7 +28,7 @@ public class DataAccess {
             java.sql.Statement st = conexion.createStatement();
             st.executeUpdate(sql);
             res = true;
-            System.out.println("se inserto");
+            System.out.println("se actualizo [Class: "+getClass().getName()+"]");
             conexion.commit();
         } catch (Exception e) {
             System.err.println("Error al insertar/Actualizar" + e.getMessage());
@@ -45,7 +45,7 @@ public class DataAccess {
                 generatedKey = rs.getInt(1);
             }
             conexion.commit();
-            System.out.println("Se insertó con el ID: " + generatedKey);
+            System.out.println("Se insertó con el ID: " + generatedKey + " [Class: "+getClass().getName()+"]");
         } catch (Exception e) {
             System.err.println("Error al insertar/Actualizar" + e.getMessage());
             return -1; 
@@ -54,7 +54,7 @@ public class DataAccess {
     }
 
 
-    public int addPersona(String NOMBRE, Date FECHANAC, String SEXO, int ESTATURA) {
+    public int addPersona(String NOMBRE, Date FECHANAC, char SEXO, int ESTATURA) {
         String insertData = "INSERT INTO ROOT.PERSONA (NOMBRE, FECHANAC, SEXO, ESTATURA) VALUES";
         SimpleDateFormat ff = new SimpleDateFormat("YYYY-MM-dd");
         String fechaString = ff.format(FECHANAC);
@@ -62,7 +62,7 @@ public class DataAccess {
         insertData += "('" 
             + NOMBRE + "', '" 
             + fechaString + "', '"
-            + SEXO.charAt(0)
+            + SEXO + "', "
             + ESTATURA
             + ")";
         System.out.println(insertData);
