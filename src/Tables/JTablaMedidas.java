@@ -71,13 +71,16 @@ public class JTablaMedidas extends JPanel{
         jt.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2) {
+                if(SwingUtilities.isRightMouseButton(e)) {
+                    jt.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+                } else if(e.getClickCount() == 2) {
                     deleteMode = false;
                     int row    = jt.rowAtPoint(e.getPoint());
                     int column =jt.columnAtPoint(e.getPoint());
                 
-                    if(row > 0 && row < medicionesData.size())
+                    if(column != 0 && row > 0 && row < medicionesData.size()) {
                         jt.editCellAt(row, column);
+                    }
                 }
             }
         });
@@ -85,10 +88,10 @@ public class JTablaMedidas extends JPanel{
         jt.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                if(e.getKeyCode() == KeyEvent.VK_ENTER && !deleteMode){
                     int row = jt.getSelectedRow();
                     int column = jt.getSelectedColumn();
-                    if(row != -1 && column != -1 && !deleteMode) {
+                    if(row != -1 && row != 0 && column != -1) {
                         TableCellEditor editor = jt.getCellEditor();
                         if(editor != null) {
                             editor.stopCellEditing();
