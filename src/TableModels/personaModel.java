@@ -53,7 +53,7 @@ public class personaModel extends AbstractTableModel{
     }
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) { 
             // Actualizar el valor en el modelo de la tabla
-            if(rowIndex > 0 && rowIndex < personasData.size()) {
+            if(rowIndex >= 0 && rowIndex < personasData.size()) {
                 personasData.get(rowIndex)[columnIndex] = aValue;
                 updateCellData(rowIndex, columnIndex, aValue);
                 fireTableCellUpdated(rowIndex, columnIndex); 

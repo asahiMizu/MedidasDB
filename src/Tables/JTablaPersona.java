@@ -122,9 +122,11 @@ public class JTablaPersona extends JPanel{
     }
 
     public void deleteSelectedRow() {
-        deleteMode = true;
-        int row = jt.getSelectedRow();
-        pm.removeRow(row);
+        if(jt.getSelectedRow() != -1) {
+            deleteMode = true;
+            int row = jt.getSelectedRow();
+            pm.removeRow(row);
+        }
     }
     
 
@@ -140,6 +142,9 @@ public class JTablaPersona extends JPanel{
     }
     public Object getValueAt(int row, int column){
         return jt.getValueAt(row, column);
+    }
+    public int getSelectedRow() {
+        return jt.getSelectedRow();
     }
 
 
