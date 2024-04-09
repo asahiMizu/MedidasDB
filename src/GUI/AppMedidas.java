@@ -281,7 +281,7 @@ public class AppMedidas extends javax.swing.JFrame {
         jLabel3.setText("ID Persona");
 
         IDComboBox.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Femenino", "Masculino", "Otro" }));
+        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
         IDComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IDComboBoxActionPerformed(evt);
