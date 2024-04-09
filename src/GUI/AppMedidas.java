@@ -6,6 +6,8 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -87,10 +89,37 @@ public class AppMedidas extends javax.swing.JFrame {
 
         nombrefield.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         nombrefield.setText("Inserta tu nombre");
+        nombrefield.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                nameFieldPressed(evt);
+            }
+        });
+        nombrefield.addTextListener(new java.awt.event.TextListener() {
+            public void textValueChanged(java.awt.event.TextEvent evt) {
+                typingName(evt);
+            }
+        });
+        nombrefield.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (nombrefield.getText().equals("Inserte nombre")) {
+                    nombrefield.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (nombrefield.getText().isEmpty()) {
+                    nombrefield.setText("Inserte nombre");
+                }
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jLabel2.setText("Sexo: ");
 
+        jDateChooser1.setToolTipText("");
+        jDateChooser1.setDate(new java.util.Date(1104562873000L));
         jDateChooser1.setDateFormatString("YYYY-MM-dd");
         jDateChooser1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jDateChooser1.setMaxSelectableDate(new java.util.Date(1104562873000L));
@@ -252,7 +281,7 @@ public class AppMedidas extends javax.swing.JFrame {
         jLabel3.setText("ID Persona");
 
         IDComboBox.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
+        IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Femenino", "Masculino", "Otro" }));
         IDComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IDComboBoxActionPerformed(evt);
@@ -263,24 +292,24 @@ public class AppMedidas extends javax.swing.JFrame {
         jLabel5.setText("Fecha");
 
         jLabel7.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        jLabel7.setText("Peso");
+        jLabel7.setText("Peso [kg]");
 
         jLabel8.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        jLabel8.setText("Grasa Corporal");
+        jLabel8.setText("Grasa Corporal [%]");
 
         jLabel9.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        jLabel9.setText("Cintura");
+        jLabel9.setText("Cintura [cm]");
 
         jDateChooser2.setDateFormatString("YYYY-MM-dd");
         jDateChooser2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        jDateChooser2.setMaxSelectableDate(new java.util.Date(1104562873000L));
+        jDateChooser2.setMaxSelectableDate(null);
         jDateChooser2.setMinSelectableDate(new java.util.Date(-315593927000L));
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(140, 140, 210, 1));
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(80, 80, 200, 1));
 
-        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(140.0d, 140.0d, 210.0d, 1.0d));
+        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(40.0d, 40.0d, 500.0d, 1.0d));
 
-        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(140.0d, 140.0d, 210.0d, 1.0d));
+        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(10.0d, 10.0d, 100.0d, 1.0d));
 
         updateTableButton2.setBackground(new java.awt.Color(204, 255, 255));
         updateTableButton2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
@@ -444,6 +473,10 @@ public class AppMedidas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void deletePersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletePersonaButtonActionPerformed
+        if(jTablaPersona2.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una persona", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         jTablaPersona2.deleteSelectedRow();
         IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
     }//GEN-LAST:event_deletePersonaButtonActionPerformed
@@ -459,6 +492,18 @@ public class AppMedidas extends javax.swing.JFrame {
         // Validacion de datos
         if (!nombre.matches("[a-zA-Z\\s]+")) { // Verificar si el nombre contiene solo letras y espacios
             JOptionPane.showMessageDialog(this, "El nombre solo puede contener letras y espacios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(nombre == null){
+            JOptionPane.showMessageDialog(this, "Inserte un nombre", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(fechaNacimiento == null){
+            JOptionPane.showMessageDialog(this, "Inserte una fecha de nacimiento", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(!(fechaNacimiento instanceof Date)){
+            JOptionPane.showMessageDialog(this, "La fecha de nacimiento no es valida", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -486,13 +531,27 @@ public class AppMedidas extends javax.swing.JFrame {
     }//GEN-LAST:event_addPersonaButtonActionPerformed
 
     private void addMedidasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedidasButtonActionPerformed
-        //
+        if(jTablaPersona2.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una persona para agregarle medidas", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        //Cambiar a la pestaña 2
+        jTabbedPane2.setSelectedIndex(1);
+        IDComboBox.setSelectedIndex(jTablaPersona2.getSelectedRow());
 
     }//GEN-LAST:event_addMedidasButtonActionPerformed
 
     private void IDComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDComboBoxActionPerformed
         //IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
     }//GEN-LAST:event_IDComboBoxActionPerformed
+
+    private void nameFieldPressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nameFieldPressed
+        nombrefield.setText("");
+    }//GEN-LAST:event_nameFieldPressed
+
+    private void typingName(java.awt.event.TextEvent evt) {//GEN-FIRST:event_typingName
+        // TODO add your handling code here:
+    }//GEN-LAST:event_typingName
     private void updateTableButtonActionPerformed(java.awt.event.ActionEvent evt) {
         jTablaPersona2.updateTable(null);
         IDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(getIDsModel()));
@@ -506,6 +565,23 @@ public class AppMedidas extends javax.swing.JFrame {
         int cintura  = (int)jSpinner2.getValue();
         double grasa = (double)jSpinner4.getValue();
         int idPersona = -1;
+
+        if(fecha == null){
+            JOptionPane.showMessageDialog(this, "Inserte una fecha", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(jSpinner3.getValue() == null){
+            JOptionPane.showMessageDialog(this, "Inserte un peso", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(jSpinner2.getValue() == null){
+            JOptionPane.showMessageDialog(this, "Inserte la medida de la cintura", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(jSpinner4.getValue() == null){
+            JOptionPane.showMessageDialog(this, "Inserte el peso", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         //Validacion
         try {
@@ -545,6 +621,10 @@ public class AppMedidas extends javax.swing.JFrame {
         jTablaMedidas1.addMedicion(dates);
     }
     private void deleteMedidaButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        if(jTablaMedidas1.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una medida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         jTablaMedidas1.deleteSelectedRow();
     }
 
