@@ -135,6 +135,9 @@ public class JTablaMedidas extends JPanel{
     public int getSelectedRow() {
         return jt.getSelectedRow();
     }
+    public int getRowCount() {
+        return mm.getRowCount();
+    }
 
     private class customCell extends JTextField implements TableCellRenderer {
         public customCell() {

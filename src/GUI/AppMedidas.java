@@ -8,6 +8,7 @@ package GUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -582,6 +583,7 @@ public class AppMedidas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Inserte el peso", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+    
 
         //Validacion
         try {
@@ -626,6 +628,30 @@ public class AppMedidas extends javax.swing.JFrame {
             return;
         }
         jTablaMedidas1.deleteSelectedRow();
+    }
+
+    private boolean dateExist(int id, Date date) {
+        boolean dateExist = false;
+
+        SimpleDateFormat ff = new SimpleDateFormat("YYYY-MM-dd");
+        String fechaString = ff.format(date);
+
+        int rowCount = jTablaMedidas1.getRowCount();
+        String[] fechas = new String[rowCount];
+        for (int i = 0 ; i < rowCount; i ++) {
+            Object fecha     = jTablaPersona2.getValueAt(i, 2);
+            int otherID = Integer.parseInt(jTablaPersona2.getValueAt(i, 0).toString());
+            if (fecha != null && id == otherID) {
+                String item = fecha.toString();
+                fechas[i] = item;
+            }
+        }
+
+        for(int j = 0; j < rowCount; j++) {
+            if(fechaString.equals(fechas[j])) return true;
+            System.out.println(fechaString + " " + fechas[j]);
+        }
+        return dateExist;
     }
 
     private String[] getIDsModel() {
